@@ -204,7 +204,7 @@
 														{
 												?>
 															<span class="m-widget24__stats m--font-danger">
-															RM (<?php echo number_format($net_income, 2) ?>);
+															RM (<?php echo number_format($net_income, 2) ?>)
 															</span>
 												
 												<?php
@@ -214,7 +214,7 @@
 														{
 												?>
 															<span class="m-widget24__stats m--font-info">
-															RM <?php echo number_format($net_income, 2) ?>;
+															RM <?php echo number_format($net_income, 2) ?>
 															</span>
 												<?php
 														}
