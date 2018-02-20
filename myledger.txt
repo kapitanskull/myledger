@@ -1,0 +1,63 @@
+===Database myledger
+
+== Table structure for table balance_record
+
+|------
+|Column|Type|Null|Default
+|------
+|//**id**//|int(11)|No|
+|month|varchar(50)|No|
+|year|varchar(50)|No|
+|total_credit|varchar(50)|No|
+|total_debit|varchar(50)|No|
+|current_balance|varchar(50)|No|
+|carry_forward_balance|varchar(50)|No|
+|user_id|int(11)|No|
+== Table structure for table ci_audit_trail
+
+|------
+|Column|Type|Null|Default
+|------
+|//**id**//|int(11)|No|
+|sql_str|text|Yes|NULL
+|filename|varchar(255)|Yes|NULL
+|function|varchar(255)|Yes|NULL
+|comment|text|Yes|NULL
+|ip_address|varchar(32)|Yes|NULL
+|username|varchar(255)|Yes|NULL
+|insert_date|datetime|No|
+== Table structure for table ci_sessions
+
+|------
+|Column|Type|Null|Default
+|------
+|id|varchar(128)|No|
+|ip_address|varchar(45)|No|
+|timestamp|int(10)|No|0
+|data|blob|No|
+== Table structure for table transaction_records
+
+|------
+|Column|Type|Null|Default
+|------
+|//**id**//|int(11)|No|
+|date|date|No|
+|description|text|No|
+|amount_type|varchar(50)|No|
+|amount|varchar(255)|No|
+|user_id|int(11)|No|
+== Table structure for table users
+
+|------
+|Column|Type|Null|Default
+|------
+|//**id**//|int(100)|No|
+|first_name|varchar(255)|No|
+|last_name|varchar(255)|No|
+|password|varchar(255)|No|
+|username|varchar(255)|No|
+|status|int(3)|No|
+|create_date|datetime|No|
+|create_by|varchar(50)|No|
+|modify_date|datetime|No|
+|modify_by|varchar(50)|No|
