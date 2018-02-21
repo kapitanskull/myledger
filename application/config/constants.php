@@ -83,3 +83,18 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+#custom constant -- by thekapitan --
+// defined('DB_PREFIX')      OR define('DB_PREFIX', 'osm_');
+defined('PAGING_DEFAULT_LIMIT')      OR define('PAGING_DEFAULT_LIMIT', '25');
+// define('UPLOAD_ROOT_PATH', './uploads/');
+// define('UPLOAD_ROOT_URL', 'uploads/');
+// define('ABSPATH',$_SERVER['DOCUMENT_ROOT']); 
+// if(!is_dir(UPLOAD_ROOT_PATH)){
+	// mkdir(UPLOAD_ROOT_PATH, 0777, TRUE);
+// }
+defined('ADMIN_EMAIL_HOST')      OR define('ADMIN_EMAIL_HOST', 'smtp.gmail.com'); // highest automatically-assigned error code
+defined('ADMIN_EMAIL_PORT')      OR define('ADMIN_EMAIL_PORT', 587); // highest automatically-assigned error code
+defined('ADMIN_EMAIL_SMTP_SECURE')      OR define('ADMIN_EMAIL_SMTP_SECURE', 'tls'); // highest automatically-assigned error code
+defined('ADMIN_EMAIL_PASS')      OR define('ADMIN_EMAIL_PASS', 'skull0987'); // highest automatically-assigned error code
+defined('ADMIN_SMTP_EMAIL')      OR define('ADMIN_SMTP_EMAIL', 'kapitanskull@gmail.com'); // highest automatically-assigned error code

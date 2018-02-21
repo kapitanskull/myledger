@@ -67,7 +67,7 @@
 													<input type="password" name="password" class="form-control m-input" value="<?php echo (isset($row) AND $row !== false  AND isset($row->id) AND $row->id > 0 AND isset($row->password) AND $row->password != '') ? $row->password : '' ?>">
 													<input type="hidden" name="ori_password" class="form-control m-input" value="<?php echo (isset($row) AND $row !== false  AND isset($row->id) AND $row->id > 0 AND isset($row->password) AND $row->password != '') ? $row->password : '' ?>">
 													<span class="m-form__help">
-														More than 6 character
+														Alphanumeric and minimum 6 character
 													</span>
 												</div>
 												<label class="col-md-2 col-form-label">

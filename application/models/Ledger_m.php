@@ -10,30 +10,57 @@ class Ledger_m extends CI_Model {
 	
 	function transaction_list()
 	{
-		$query = $this->db->query("SELECT COUNT(`id`) AS total FROM `transaction_records`")->row();
+		$total_income = 0;
+		$total_expense = 0;
+		
+		$where_sql = " WHERE `user_id` = " . $this->db->escape($this->session->userdata('id'));
+		
+		$query_count = "SELECT COUNT(`id`) AS total FROM `transaction_records`" . $where_sql;
+		$query = $this->db->query($query_count)->row();
 		$data['total_rows'] = $query->total;
 
-		$config['base_url'] = base_url() . 'index.php/ledger/listing/';
+		$config['base_url'] = site_url() . '/ledger/listing/';
 		$config['uri_segment'] = 4;
 		$config['total_rows'] = $data['total_rows'];#num row data in the db
-		$config['per_page'] = 10;#number of data be display
+		$config['per_page'] = PAGING_DEFAULT_LIMIT;#number of data be display
 		
 		$this->pagination->initialize($config);
 		$data['pagination'] = $this->pagination->create_links();
 
-		$sql = '';
+		$limit_sql = '';
 		if($data['total_rows'] > 0){
 			if($this->uri->segment($config['uri_segment']) && is_numeric($this->uri->segment($config['uri_segment'])))
 			{
-				$sql = ' LIMIT ' . $this->uri->segment($config['uri_segment']) . ', ' . $config['per_page'];
+				$limit_sql = ' LIMIT ' . $this->uri->segment($config['uri_segment']) . ', ' . $config['per_page'];
 			}
 			else
 			{
-				$sql = ' LIMIT 0, ' . $config['per_page'];
+				$limit_sql = ' LIMIT 0, ' . $config['per_page'];
 			}
 		}
-
-		$data['query'] = $this->db->query("SELECT * FROM `transaction_records` ORDER BY `date` ASC $sql");
+		
+		$query_data = "SELECT * FROM `transaction_records` " . $where_sql . " ORDER BY `date` ASC " . $limit_sql;
+		
+		$data['query'] = $this->db->query($query_data);
+		
+		#calculate total income from db
+		$sql_income = "SELECT SUM(`amount`) as 'total_income' FROM `transaction_records` WHERE `amount_type` = 'income' AND `user_id` = " . $this->db->escape($this->session->userdata('id'));
+		$query_income = $this->db->query($sql_income);
+		if($query_income->num_rows() > 0)
+		{
+			$total_income = $query_income->row()->total_income;
+		}
+		
+		$sql_expenses = "SELECT SUM(`amount`) as 'total_expenses' FROM `transaction_records` WHERE `amount_type` = 'expenses' AND `user_id` = " . $this->db->escape($this->session->userdata('id'));
+		$query_expenses = $this->db->query($sql_expenses);
+		if($query_expenses->num_rows() > 0)
+		{
+			$total_expenses = $query_expenses->row()->total_expenses;
+		}
+		
+		$data['total_income'] = $total_income;
+		$data['total_expenses'] = $total_expenses;
+		$data['net_income'] = $total_income - $total_expenses;
 
 		return $data;
 	}
@@ -117,8 +144,6 @@ class Ledger_m extends CI_Model {
 			return false;
 		
 	}
-	
-	
 	
 	function delete_user(){
 		$id = $this->input->post('remove_id');

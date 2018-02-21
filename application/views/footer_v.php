@@ -34,7 +34,7 @@
 		<i class="la la-arrow-up"></i>
 	</div>
 	<!-- end::Scroll Top -->			
-	<script>var base_url = '<?php echo base_url()?>'</script>
+	<script>var base_url = '<?php echo site_url()?>'</script>
 	<!--begin::Base Scripts -->
 	<script src="<?php echo base_url() ?>assets/vendors/base/vendors.bundle.js" type="text/javascript"></script>
 	<script src="<?php echo base_url() ?>assets/demo/demo2/base/scripts.bundle.js" type="text/javascript"></script>
@@ -45,3 +45,27 @@
 	<!--begin::Page Snippets -->
 	<script src="<?php echo base_url() ?>assets/app/js/dashboard.js?v=<?php echo time(); ?>" type="text/javascript"></script>
 	<!--end::Page Snippets -->
+	<script type="text/javascript">
+		var error_toast = function()
+		{
+			toastr.options = {
+			  "closeButton": true,
+			  "debug": false,
+			  "newestOnTop": false,
+			  "progressBar": false,
+			  "positionClass": "toast-top-right",
+			  "preventDuplicates": true,
+			  "onclick": null,
+			  "showDuration": "0",
+			  "hideDuration": "0",
+			  "timeOut": "0",
+			  "extendedTimeOut": "0",
+			  "showEasing": "swing",
+			  "hideEasing": "linear",
+			  "showMethod": "fadeIn",
+			  "hideMethod": "fadeOut"
+			};
+
+			toastr.error("An error occur in server side.", "Error");
+		}
+	</script>

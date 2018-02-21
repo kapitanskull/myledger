@@ -4,7 +4,6 @@ class User_m extends CI_Model {
 	
     function __construct()
     {
-        // Call the Model constructor
         parent::__construct();
     }
 	
@@ -13,14 +12,15 @@ class User_m extends CI_Model {
 		$query = $this->db->query("SELECT COUNT(`id`) AS total FROM `users`")->row();
 		$data['total_rows'] = $query->total;
 
-		$config['base_url'] = base_url() . 'index.php/user/listing/';
-		$config['uri_segment'] = 4;
+		$config['base_url'] = site_url() . '/user/listing/';
+		$config['uri_segment'] = 3;
 		$config['total_rows'] = $data['total_rows'];#num row data in the db
-		$config['per_page'] = 10;#number of data be display
+		$config['per_page'] = PAGING_DEFAULT_LIMIT;#number of data be display
 		
 		$this->pagination->initialize($config);
 		$data['pagination'] = $this->pagination->create_links();
-
+		$data['num_per_page'] = $config['per_page'];
+		
 		$sql = '';
 		if($data['total_rows'] > 0){
 			if($this->uri->segment($config['uri_segment']) && is_numeric($this->uri->segment($config['uri_segment'])))
@@ -38,16 +38,75 @@ class User_m extends CI_Model {
 		return $data;
 	}
 	
+	function search_users($keyword64)
+	{
+		$where_sql = "";
+		$post = json_decode(decrypt_base64($keyword64));
+		
+		$order_sql = "ORDER BY `id` DESC"; //by default sorting
+		$per_page_data = PAGING_DEFAULT_LIMIT;
+		
+		//searching
+	    if(isset($post->column_name) && $post->keyword_search != '') {
+		    $where_sql = " WHERE `first_name` LIKE " . $this->db->escape('%' . $post->keyword_search . '%') . " OR `last_name` LIKE " . $this->db->escape('%' . $post->keyword_search . '%');
+	    }
+		
+		//for sorting
+		if(isset($post->column_name) && $post->column_name != '' && $post->sort_type != ''){
+			$order_sql = " ORDER BY `" . $post->column_name . "` " . $post->sort_type;
+		}
+		
+		//limitation data to display
+		if(isset($post->num_per_page) && $post->num_per_page != '' && is_numeric($post->num_per_page) && $post->num_per_page > 0){
+			$per_page_data = $post->num_per_page;
+		}
+	    
+	    $data = json_decode(decrypt_base64($keyword64), true); // Get as Arrays
+		
+		$sql_count = "SELECT COUNT(id) AS total FROM `users` " . $where_sql;
+		$query = $this->db->query($sql_count)->row();
+		
+		#for pagination button we link to ajax function so next content will generate using ajax
+		$config['base_url'] = site_url() . '/user/search/' . $keyword64 . '/';
+		$data['total_rows'] = $query->total;		
+		$config['uri_segment'] = 4;
+		$config['total_rows'] = $data['total_rows'];
+		$config['per_page'] = $per_page_data;
+
+		$this->pagination->initialize($config);
+
+		$data['pagination'] = $this->pagination->create_links();
+		$data['num_per_page'] = $per_page_data;
+
+		$sql_limit = '';
+		if($data['total_rows'] > 0) {
+			if($this->uri->segment($config['uri_segment']) AND is_numeric($this->uri->segment($config['uri_segment'])))
+			{
+				$sql_limit = ' LIMIT ' . $this->uri->segment($config['uri_segment']) . ', ' . $config['per_page'];
+			}
+			else
+			{
+				$sql_limit = ' LIMIT 0, ' . $config['per_page'];
+			}
+		}
+		
+		$sql_query = "SELECT * FROM `users` " . $where_sql . $order_sql . $sql_limit;
+	
+		$data['query'] = $this->db->query($sql_query);
+		
+		return $data;
+	}
+	
 	function save_user($data = array()){
 		$DBdata = array(
 	    	'first_name' => trim($data['first_name']),
 			'last_name' => trim($data['last_name']),
 			'username' => trim($data['username']),
+			'password' => trim($data['password']),
 	    	'create_by' => trim('1'),
 	    	'create_date' => date('Y-m-d H:i:s')
 	    );
 		
-		$password = trim($data['password']);
 		$ori_password = trim($data['ori_password']);
 		$confirm_password = trim($data['confirm_password']);
 		$id = trim($data['id']);
@@ -67,40 +126,31 @@ class User_m extends CI_Model {
 	    	return false;
 	    }
 		
-		if($password == '')
+		if($DBdata['password'] == '')
 		{
 			set_message("Please enter password.", "danger");
 	    	return false;
 		}
-		
-		if(strlen($password) < 6)
-		{
-			set_message("Minimum password is 6 character.", "danger");
-	    	return false;
-		}
-		
-		if($confirm_password == '')
-		{
-			set_message("Please enter confirm password.", "danger");
-	    	return false;
-		}
-		
-		if($password !== $confirm_password)
-		{
-			set_message("Your password and confirmation password not same.", "danger");
-	    	return false;
-		}
 	
+		if(!preg_match("/[A-Za-z0-9]+/", $DBdata['password']))
+		{
+			set_message('Please enter a valid password. Only a-z, A-Z or 0-9 are allowed.', 'danger');
+			return false;
+		}
+			
+		if($confirm_password == '' || $confirm_password != $DBdata['password'] ||!preg_match("/[A-Za-z0-9]+/", $confirm_password))
+		{
+			set_message('Your Passwords do not match each other, please try again', 'danger');
+			return false;
+		}
+		
+		// if($ori_password == $DBdata['password'])
+			$DBdata['password'] = md5($DBdata['password']);
+			
 		if(!isset($data['status'])) {
 	    	set_message("Please select status .", "danger");
 	    	return false;
 	    }
-		
-		if(isset($ori_password) AND $ori_password != md5($password))
-		{
-			$DBdata['password'] = md5($password);
-		}
-		
 		
 		$DBdata['status'] = trim($data['status']);
 		
@@ -153,25 +203,15 @@ class User_m extends CI_Model {
 		
 	}
 	
-	
-	
 	function delete_user(){
-		$id = $this->input->post('remove_id');
+		$id = $this->input->post('remove_data_id');
 		
-		$sql2 = "SELECT * FROM `ci_user` WHERE `create_by` =" . $this->db->escape($id);
-		$query2 = $this->db->query($sql2);
-		
-		if($query2->num_rows() > 0){
-			$sql3 = "DELETE FROM `ci_user` WHERE `create_by` = " . $this->db->escape($id) ." AND `user_type` = 'sub insurer'";
-			$query3 = $this->db->query($sql3);
-		}
-		
-		$sql = "DELETE FROM `ci_user` WHERE `id` = " . $this->db->escape($id) ." AND `user_type` != 'superadmin' LIMIT 1";
+		$sql = "DELETE FROM `users` WHERE `id` = " . $this->db->escape($id) . " LIMIT 1";
 		$query = $this->db->query($sql);
 		
 		if($this->db->affected_rows() > 0) {
-			set_message("Successfully delete User Requested.");
-			audit_trail($this->db->last_query(), 'Access_m.php', 'remove_user()', 'Delete User');
+			set_message("Successfully delete data.");
+			audit_trail($this->db->last_query(), 'user_m.php', 'delete_user()', 'Delete User');
 			
 			return true;
 		} 
@@ -181,21 +221,4 @@ class User_m extends CI_Model {
 		return false;
 	}
 	
-	function delete_admin(){
-		$id = $this->input->post('remove_id');
-		
-		$query = "DELETE FROM `ci_user` WHERE `id` = " . $this->db->escape($id) ." AND `user_type` = 'superadmin' LIMIT 1";
-		$sql = $this->db->query($query);
-		
-		if($this->db->affected_rows() > 0) {
-			set_message("Successfully delete Admin Requested.");
-			audit_trail($this->db->last_query(), 'Access_m.php', 'remove_user()', 'Delete Admin');
-			
-			return true;
-		} 
-		
-		set_message("Invalid Requested Please Try Again", "danger");
-		
-		return false;
-	}
 }

@@ -61,9 +61,6 @@
 															)
 															{
 																$count = 0;
-																$total_income = 0;
-																$total_expense = 0;
-																$net_income = 0;
 																
 																if($this->uri->segment(3) != '' AND is_numeric($this->uri->segment(3)) AND $this->uri->segment(3) > 0)
 																{
@@ -87,7 +84,6 @@
 																		<?php 
 																			if(isset($rowtrans->amount_type) AND $rowtrans->amount_type == 'income' AND isset($rowtrans->amount) AND $rowtrans->amount != "" AND is_numeric($rowtrans->amount))
 																			{
-																				$total_income += $rowtrans->amount;
 																				echo "RM " . number_format($rowtrans->amount, 2);
 																			}
 																		?>
@@ -96,7 +92,6 @@
 																		<?php 
 																			if(isset($rowtrans->amount_type) AND $rowtrans->amount_type == 'expenses' AND isset($rowtrans->amount) AND $rowtrans->amount != "" AND is_numeric($rowtrans->amount))
 																			{
-																				$total_expense += $rowtrans->amount;
 																				echo "RM " . number_format($rowtrans->amount, 2);
 																			}
 																		?>
@@ -146,9 +141,9 @@
 												<span class="m-widget24__stats m--font-success">
 													RM 
 													<?php 
-														if (isset($total_income) AND is_numeric($total_income)) 
+														if (isset($arr_data['total_income']) AND is_numeric($arr_data['total_income'])) 
 														{
-															echo number_format($total_income, 2);
+															echo number_format($arr_data['total_income'], 2);
 														}
 														else
 															echo number_format(0, 2);
@@ -172,9 +167,9 @@
 												<span class="m-widget24__stats m--font-danger">
 													RM
 													<?php 
-														if (isset($total_expense) AND is_numeric($total_expense)) 
+														if (isset($arr_data['total_expenses']) AND is_numeric($arr_data['total_expenses'])) 
 														{
-															echo number_format($total_expense, 2);
+															echo number_format($arr_data['total_expenses'], 2);
 														}
 														else
 															echo number_format(0, 2);
@@ -196,25 +191,23 @@
 													Income - Expenses
 												</span>
 												<?php 
-													if (isset($total_expense) AND is_numeric($total_expense) AND isset($total_income) AND is_numeric($total_income)) 
+													if (isset($arr_data['net_income']) AND is_numeric($arr_data['net_income'])) 
 													{
-														$net_income = $total_income - $total_expense;
-														
-														if($net_income < 0)
+														if($arr_data['net_income'] < 0)
 														{
 												?>
 															<span class="m-widget24__stats m--font-danger">
-															RM (<?php echo number_format($net_income, 2) ?>)
+															RM (<?php echo number_format($arr_data['net_income'], 2) ?>)
 															</span>
 												
 												<?php
 															
 														}
-														elseif($net_income >= 0)
+														elseif($arr_data['net_income'] >= 0)
 														{
 												?>
 															<span class="m-widget24__stats m--font-info">
-															RM <?php echo number_format($net_income, 2) ?>
+															RM <?php echo number_format($arr_data['net_income'], 2) ?>
 															</span>
 												<?php
 														}

@@ -1,4 +1,14 @@
 <!DOCTYPE html>
+<?php 
+	/* 
+		most of file that relate to css, jquery i user base_url() and link i use site_url(). 
+		because sometime we cannot overide .htacccess file(which is normally we used to setting for remove index.php from url)
+		in shared hosting server. so that why i maintain the index.php in this project 
+		base_url(); // http://example.com/website
+		site_url(); // http://example.com/website/index.php
+	
+	*/
+?>
 
 <html lang="en" >
 	<!-- begin::Head -->
@@ -31,6 +41,12 @@
 		<link href="<?php echo base_url() ?>assets/vendors/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
 		<!--end::Page Vendors -->
 		<link rel="shortcut icon" href="<?php echo base_url() ?>assets/demo/demo2/media/img/logo/favicon.ico" />
+		<style>
+			.sort_by{
+				text-decoration: none !important;
+				color:#2d2e3e !important;
+			}
+		</style>
 	</head>
 	<!-- end::Head -->
 	<body class="m-page--wide m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default"  >
@@ -195,7 +211,7 @@
 																	</li>
 																	<li class="m-nav__separator m-nav__separator--fit"></li>
 																	<li class="m-nav__item">
-																		<a href="<?php echo base_url() ?>index.php/login/sayonara" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">
+																		<a href="<?php echo site_url() ?>/login/sayonara" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">
 																			Logout
 																		</a>
 																	</li>
@@ -234,7 +250,7 @@
 								<div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-dark m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-light m-aside-header-menu-mobile--submenu-skin-light "  >
 									<ul class="m-menu__nav  m-menu__nav--submenu-arrow ">
 										<li class="m-menu__item <?php echo (isset($controller) AND strtolower($controller) == 'dashboard' AND isset($function) AND $function == 'home') ? 'm-menu__item--active' : ''  ?>"  aria-haspopup="true">
-											<a  href="<?php echo base_url() ?>index.php/dashboard" class="m-menu__link ">
+											<a  href="<?php echo site_url() ?>/dashboard" class="m-menu__link ">
 												<span class="m-menu__item-here"></span>
 												<span class="m-menu__link-text">
 													Dashboard
@@ -242,7 +258,7 @@
 											</a>
 										</li>
 										<li class="m-menu__item m-menu__item--submenu m-menu__item--rel <?php echo (isset($controller) AND strtolower($controller) == 'ledger' AND ((isset($function) AND $function == 'add') OR (isset($function) AND $function == 'edit') )) ? 'm-menu__item--active' : ''  ?>"  data-menu-submenu-toggle="click" aria-haspopup="true">
-											<a  href="<?php echo base_url() ?>index.php/ledger/add" class="m-menu__link">
+											<a  href="<?php echo site_url() ?>/ledger/add" class="m-menu__link">
 												<span class="m-menu__item-here"></span>
 												<span class="m-menu__link-text">
 													<?php echo (isset($menu_name) AND $menu_name != "") ? $menu_name : "Add Transaction" ?>
@@ -250,7 +266,7 @@
 											</a>
 										</li>
 										<li class="m-menu__item m-menu__item--submenu m-menu__item--rel <?php echo (isset($controller) AND strtolower($controller) == 'ledger' AND isset($function) AND $function == 'listing') ? 'm-menu__item--active' : ''  ?>"  data-menu-submenu-toggle="click" aria-haspopup="true">
-											<a  href="<?php echo base_url() ?>index.php/ledger/listing" class="m-menu__link">
+											<a  href="<?php echo site_url() ?>/ledger/listing" class="m-menu__link">
 												<span class="m-menu__item-here"></span>
 												<span class="m-menu__link-text">
 													Transaction Listing
@@ -294,13 +310,13 @@
 															</li> */
 															?>
 															<li class="m-menu__item <?php echo (isset($controller) AND strtolower($controller) == 'user' AND isset($function) AND $function == 'listing') ? 'm-menu__item--active' : ''  ?>" data-redirect="true" aria-haspopup="true">
-																<a href="<?php echo base_url() ?>index.php/user/listing" class="m-menu__link ">
+																<a href="<?php echo site_url() ?>/user/listing" class="m-menu__link ">
 																	<i class="m-menu__link-icon flaticon-list-1"></i>
 																	<span class="m-menu__link-text">User List</span>
 																</a>
 															</li>
 															<li class="m-menu__item <?php echo (isset($controller) AND strtolower($controller) == 'user' AND isset($function) AND $function == 'add') ? 'm-menu__item--active' : ''  ?>" data-redirect="true" aria-haspopup="true">
-																<a href="<?php echo base_url() ?>index.php/user/add" class="m-menu__link ">
+																<a href="<?php echo site_url() ?>/user/add" class="m-menu__link ">
 																	<i class="m-menu__link-icon flaticon-users"></i>
 																	<span class="m-menu__link-text">Add New User</span>
 																</a>

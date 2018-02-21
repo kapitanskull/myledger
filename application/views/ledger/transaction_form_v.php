@@ -16,7 +16,7 @@
 							<div class="col-md-12">
 								<?php get_message(); ?>
 								<!--begin::Portlet-->
-								<i>mandotary field</i>&nbsp;<font style="color:red;font-size:15px;">*</font> &nbsp; <?php echo (isset($controller) AND strtolower($controller) == 'ledger' AND isset($function) AND $function == 'edit') ? "<a href='" . base_url() . "index.php/ledger/add'> Add New Transaction</a>" : "" ?>
+								<i>mandotary field</i>&nbsp;<font style="color:red;font-size:15px;">*</font> &nbsp; <?php echo (isset($controller) AND strtolower($controller) == 'ledger' AND isset($function) AND $function == 'edit') ? "<a href='" . site_url() . "/ledger/add'> Add New Transaction</a>" : "" ?>
 								<div class="m-portlet">
 									<div class="m-portlet__head">
 										<div class="m-portlet__head-caption">
