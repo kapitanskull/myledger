@@ -1,5 +1,5 @@
 	<div class="row">
-		<form id="remove_form" name="remove_form" action="<?php echo base_url()?>index.php/user/del_data" method="post">
+		<form id="remove_form" name="remove_form" action="<?php echo site_url()?>/user/del_data" method="post">
 			<input type="hidden" name="remove_data_id" id="remove_data_id" value="" />
 		</form>
 

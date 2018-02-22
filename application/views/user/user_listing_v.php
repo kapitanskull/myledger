@@ -34,7 +34,7 @@
 												# when user click sorting button, or pagination button or change number per page this content will generate by ajax;
 												?>
 												<div class="row">
-													<form id="remove_form" name="remove_form" action="<?php echo base_url()?>/user/del_data" method="post">
+													<form id="remove_form" name="remove_form" action="<?php echo site_url()?>/user/del_data" method="post">
 														<input type="hidden" name="remove_data_id" id="remove_data_id" value="" />
 													</form>
 													
@@ -55,7 +55,7 @@
 														</div>
 													</div>
 													<div class="col-md-3 ml-auto">
-														<form id="search_sorting_form" action="<?php echo base_url() ?>index.php/user/search" method="post">
+														<form id="search_sorting_form" action="<?php echo site_url() ?>/user/search" method="post">
 															<div class="form-group m-form__group">
 																<div class="input-group">
 																	<input type="text" name="keyword_search" class="form-control" placeholder="Search" value="<?php echo (isset($arr_data)&& is_array($arr_data) && isset($arr_data['keyword_search']) && $arr_data['keyword_search'] != "") ? $arr_data['keyword_search'] : "" ?>" >
@@ -137,6 +137,7 @@
 																	{
 																		$count = $this->uri->segment(4);
 																	}
+																	
 																	foreach($arr_data['query']->result() as $rowuser)
 																	{
 																		$count++;

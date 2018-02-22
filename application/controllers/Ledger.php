@@ -40,6 +40,70 @@ class Ledger extends CI_Controller {
 		$this->load->view('ledger/transaction_listing_v', $this->data);
 	}
 	
+	#for searching it will refresh page
+	public function search($keyword64 = null)
+	{
+		$this->data["breadcrumb"]["Transaction search"] = base_url() . "ledger/search";
+		$this->data['meta_title'] = 'Transaction Search';
+		$this->data['meta_description'] = "Transaction Search";
+		$this->data['page_title'] = 'Transaction Search';
+		
+		#Process the posted data, then redirect back to this function
+		if($_POST){
+			
+		  #We Base64 Encode the search String, it's for safe url passing.
+		  $keyword = encrypt_base64(json_encode($this->input->post()));
+			
+		  #Search button pressed with empty search string 
+		  if($keyword == '')
+			   redirect("ledger/search");
+		  else
+			 redirect("ledger/search/" . $keyword);	
+		  
+			exit();
+		}
+		
+		if($keyword64 != null) {
+		  #Get the data from DB
+			$this->data['arr_data'] = $this->ledger_m->search_transaction($keyword64);
+		}
+		
+		$this->load->view('ledger/transaction_listing_v', $this->data);
+	}
+	
+	#for sorting, change numbber_page, it will generate by ajax
+	public function ajax_sorting($keyword64 = null)
+	{
+		$this->data["breadcrumb"]["User search"] = base_url() . "user/search";
+		$this->data['meta_title'] = 'User Search';
+		$this->data['meta_description'] = "User Search";
+		$this->data['page_title'] = 'User Search';
+		
+		#Process the posted data, then redirect back to this function
+		if($_POST){
+			
+		  #We Base64 Encode the search String, it's for safe url passing.
+		  $keyword = encrypt_base64(json_encode($this->input->post()));
+			
+		  #Search button pressed with empty search string 
+		  if($keyword == '')
+			   redirect("user/ajax_sorting");
+		  else
+			 redirect("user/ajax_sorting/" . $keyword);	
+		  
+			exit();
+		}
+		
+		if($keyword64 == null) {
+		  #Get the data from DB
+		  $keyword64 = encrypt_base64(json_encode(array('keyword_search' => "")));
+		}
+		
+		$this->data['arr_data'] = $this->user_m->search_users($keyword64);
+	
+		$this->load->view("user/ajax_user_listing_v", $this->data);
+	}
+	
 	public function add()
 	{
 		if($_POST) 
