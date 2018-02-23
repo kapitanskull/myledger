@@ -74,7 +74,24 @@
 												<font style="color:red;font-size:15px;">*</font>Amount : RM
 												</label>
 												<div class="col-md-3">
-													<input type="text" name="amount" class="form-control m-input" value="<?php echo (isset($row) AND $row !== false  AND isset($row->amount) AND $row->amount != "") ? number_format($row->amount, '2', ".", "") : '' ?>">
+												<?php 
+													if(isset($row) AND $row !== false)
+													{
+														if(isset($row->amount) AND is_numeric($row->amount))
+														{
+															$nilai = $row->amount;
+														}
+														elseif(isset($row->amount_type) AND $row->amount_type == 'income' AND isset($row->income) AND is_numeric($row->income) AND $row->income > 0)
+														{
+															$nilai = $row->income;
+														}
+														elseif(isset($row->amount_type) AND $row->amount_type == 'expenses' AND isset($row->expenses) AND is_numeric($row->expenses) AND $row->expenses > 0)
+														{
+															$nilai = $row->expenses;
+														}
+													}
+												?>
+													<input type="text" name="amount" class="form-control m-input" value="<?php echo (isset($nilai) && is_numeric($nilai)) ? number_format($nilai, '2', ".", "") : '' ?>">
 													<input type="hidden" name="id" class="form-control m-input" value="<?php echo (isset($row) AND $row !== false  AND isset($row->id) AND $row->id > 0) ? $row->id : '' ?>">
 												</div>
 											</div>

@@ -66,84 +66,12 @@
 										</a>
 									</div>
 									<div class="m-stack__item m-stack__item--middle m-brand__tools">
-										<div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-left m-dropdown--align-push" data-dropdown-toggle="click" aria-expanded="true">
-											<div class="m-dropdown__wrapper">
-												<span class="m-dropdown__arrow m-dropdown__arrow--left m-dropdown__arrow--adjust"></span>
-												<div class="m-dropdown__inner">
-													<div class="m-dropdown__body">
-														<div class="m-dropdown__content">
-															<ul class="m-nav">
-																<li class="m-nav__section m-nav__section--first m--hide">
-																	<span class="m-nav__section-text">
-																		Quick Menu
-																	</span>
-																</li>
-																<li class="m-nav__item">
-																	<a href="" class="m-nav__link">
-																		<i class="m-nav__link-icon flaticon-share"></i>
-																		<span class="m-nav__link-text">
-																			Human Resources
-																		</span>
-																	</a>
-																</li>
-																<li class="m-nav__item">
-																	<a href="" class="m-nav__link">
-																		<i class="m-nav__link-icon flaticon-chat-1"></i>
-																		<span class="m-nav__link-text">
-																			Customer Relationship
-																		</span>
-																	</a>
-																</li>
-																<li class="m-nav__item">
-																	<a href="" class="m-nav__link">
-																		<i class="m-nav__link-icon flaticon-info"></i>
-																		<span class="m-nav__link-text">
-																			Order Processing
-																		</span>
-																	</a>
-																</li>
-																<li class="m-nav__item">
-																	<a href="" class="m-nav__link">
-																		<i class="m-nav__link-icon flaticon-lifebuoy"></i>
-																		<span class="m-nav__link-text">
-																			Accounting
-																		</span>
-																	</a>
-																</li>
-																<li class="m-nav__separator m-nav__separator--fit"></li>
-																<li class="m-nav__item">
-																	<a href="" class="m-nav__link">
-																		<i class="m-nav__link-icon flaticon-chat-1"></i>
-																		<span class="m-nav__link-text">
-																			Customer Relationship
-																		</span>
-																	</a>
-																</li>
-																<li class="m-nav__item">
-																	<a href="" class="m-nav__link">
-																		<i class="m-nav__link-icon flaticon-info"></i>
-																		<span class="m-nav__link-text">
-																			Order Processing
-																		</span>
-																	</a>
-																</li>
-															</ul>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- BEGIN: Responsive Aside Left Menu Toggler -->
-										<a href="javascript:;" id="m_aside_left_offcanvas_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-tablet-and-mobile-inline-block">
-											<span></span>
-										</a>
-										<!-- END -->
-						<!-- begin::Responsive Header Menu Toggler-->
+										<!-- begin::Responsive Header Menu Toggler-->
 										<a id="m_aside_header_menu_mobile_toggle" href="javascript:;" class="m-brand__icon m-brand__toggler m--visible-tablet-and-mobile-inline-block">
 											<span></span>
 										</a>
 										<!-- end::Responsive Header Menu Toggler-->
-			<!-- begin::Topbar Toggler-->
+										<!-- begin::Topbar Toggler-->
 										<a id="m_aside_header_topbar_mobile_toggle" href="javascript:;" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
 											<i class="flaticon-more"></i>
 										</a>
@@ -193,17 +121,12 @@
 																		</span>
 																	</li>
 																	<li class="m-nav__item">
-																		<a href="profile.html" class="m-nav__link">
+																		<a href="#" class="m-nav__link">
 																			<i class="m-nav__link-icon flaticon-profile-1"></i>
 																			<span class="m-nav__link-title">
 																				<span class="m-nav__link-wrap">
 																					<span class="m-nav__link-text">
 																						My Profile
-																					</span>
-																					<span class="m-nav__link-badge">
-																						<span class="m-badge m-badge--success">
-																							2
-																						</span>
 																					</span>
 																				</span>
 																			</span>

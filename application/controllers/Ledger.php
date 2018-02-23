@@ -74,10 +74,10 @@ class Ledger extends CI_Controller {
 	#for sorting, change numbber_page, it will generate by ajax
 	public function ajax_sorting($keyword64 = null)
 	{
-		$this->data["breadcrumb"]["User search"] = base_url() . "user/search";
-		$this->data['meta_title'] = 'User Search';
-		$this->data['meta_description'] = "User Search";
-		$this->data['page_title'] = 'User Search';
+		$this->data["breadcrumb"]["Transcation Search"] = base_url() . "ledger/search";
+		$this->data['meta_title'] = 'Transaction Search';
+		$this->data['meta_description'] = "Transaction Search";
+		$this->data['page_title'] = 'Transaction Search';
 		
 		#Process the posted data, then redirect back to this function
 		if($_POST){
@@ -87,9 +87,9 @@ class Ledger extends CI_Controller {
 			
 		  #Search button pressed with empty search string 
 		  if($keyword == '')
-			   redirect("user/ajax_sorting");
+			   redirect("ledger/ajax_sorting");
 		  else
-			 redirect("user/ajax_sorting/" . $keyword);	
+			 redirect("ledger/ajax_sorting/" . $keyword);	
 		  
 			exit();
 		}
@@ -99,9 +99,9 @@ class Ledger extends CI_Controller {
 		  $keyword64 = encrypt_base64(json_encode(array('keyword_search' => "")));
 		}
 		
-		$this->data['arr_data'] = $this->user_m->search_users($keyword64);
+		$this->data['arr_data'] = $this->ledger_m->search_transaction($keyword64);
 	
-		$this->load->view("user/ajax_user_listing_v", $this->data);
+		$this->load->view("ledger/ajax_transaction_listing_v", $this->data);
 	}
 	
 	public function add()
@@ -133,7 +133,7 @@ class Ledger extends CI_Controller {
 		$this->data['meta_title'] = 'Add new transaction';
 		$this->data['page_title'] = 'Add new transaction';
 		$this->data['meta_description'] = "Add new transaction";
-		// ad($this->data);exit;
+		
 		$this->load->view('ledger/transaction_form_v', $this->data);
 	}
 	
@@ -162,4 +162,17 @@ class Ledger extends CI_Controller {
 			redirect('ledger/listing');
 		}
 	} 
+	
+	function del_data()
+	{
+		$rs = $this->ledger_m->delete_transaction();
+		
+		if($rs === false) 
+			set_message("Delete failed. Data has not changed", "error");
+		else 
+			set_message("user has been deleted.", "success");
+
+		redirect('ledger/listing/');
+	}
+	
 }

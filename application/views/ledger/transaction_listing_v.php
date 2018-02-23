@@ -34,7 +34,7 @@
 												# when user click sorting button, or pagination button or change number per page this content will generate by ajax;
 												?>
 												<div class="row">
-													<form id="remove_form" name="remove_form" action="<?php echo base_url()?>/user/del_data" method="post">
+													<form id="remove_form" name="remove_form" action="<?php echo site_url()?>/ledger/del_data" method="post">
 														<input type="hidden" name="remove_data_id" id="remove_data_id" value="" />
 													</form>
 													
@@ -73,7 +73,7 @@
 																			<input type="text" name="keyword_search" class="form-control" placeholder="Search" value="<?php echo (isset($arr_data)&& is_array($arr_data) && isset($arr_data['keyword_search']) && $arr_data['keyword_search'] != "") ? $arr_data['keyword_search'] : "" ?>" >
 																			<div class="input-group-append">
 																				<button class="btn btn-primary" type="submit">
-																					Go!
+																					Search
 																				</button>
 																			</div>
 																		</div>
@@ -81,6 +81,13 @@
 																	<input type="hidden" class="form-control column_name" name="column_name"  value="<?php echo (isset($arr_data)&& is_array($arr_data) && isset($arr_data['column_name']) && $arr_data['column_name'] != "") ? $arr_data['column_name'] : "" ?>">
 																	<input type="hidden" class="form-control sortType" name="sort_type"  value="<?php echo (isset($arr_data)&& is_array($arr_data) && isset($arr_data['sort_type']) && $arr_data['sort_type'] != "") ? $arr_data['sort_type'] : "" ?>">
 																	<input type="hidden" class="form-control num-perpage" name="num_per_page"  value="<?php echo (isset($arr_data)&& is_array($arr_data) && isset($arr_data['num_per_page']) && $arr_data['num_per_page'] != "") ? $arr_data['num_per_page'] : "" ?>">
+																</div>
+																<div class="col-md-2 ml-auto">
+																	<div class="form-group m-form__group">
+																		<button type="reset" class="btn btn-danger btnreset">
+																			Reset
+																		</button>
+																	</div>
 																</div>
 															</div>
 														</form>
@@ -95,16 +102,45 @@
 																		#
 																	</th>
 																	<th>
-																		Date
+																		<a class="sort_by" href="javascript:;" 
+																			data-orderbytable="" 
+																			data-orderbycolum="date"
+																			data-sortingby="<?php echo (isset($arr_data)&& is_array($arr_data) && isset($arr_data['sort_type']) && $arr_data['sort_type'] == "asc") ? "desc" : "asc" ?>">
+																			Date &nbsp;
+																			<i class="fa fa-sort<?php echo isset($arr_data)&& is_array($arr_data) && isset($arr_data['column_name']) && $arr_data['column_name'] == "date" && isset($arr_data['sort_type']) && $arr_data['sort_type'] != "" ? "-" . $arr_data['sort_type'] : "" ?>" style="font-size:15px;"></i>
+																		</a> 
 																	</th>
 																	<th>
-																		Description
+																		<a class="sort_by" href="javascript:;" 
+																			data-orderbytable="" 
+																			data-orderbycolum="description" 
+																			data-sortingby="<?php echo (isset($arr_data)&& is_array($arr_data) && isset($arr_data['sort_type']) && $arr_data['sort_type'] == "asc") ? "desc" : "asc" ?>">
+																			Description &nbsp;
+																			<i class="fa fa-sort<?php echo isset($arr_data)&& is_array($arr_data) && isset($arr_data['column_name']) && $arr_data['column_name'] == "description" && isset($arr_data['sort_type']) && $arr_data['sort_type'] != "" ? "-" . $arr_data['sort_type'] : "" ?>" style="font-size:15px;"></i>
+																		</a> 
 																	</th>
 																	<th>
-																		Income
+																		
+																		<a class="sort_by" href="javascript:;" 
+																			data-orderbytable="" 
+																			data-orderbycolum="income" 
+																			data-sortingby="<?php echo (isset($arr_data)&& is_array($arr_data) && isset($arr_data['sort_type']) && $arr_data['sort_type'] == "asc") ? "desc" : "asc" ?>">
+																			Income &nbsp;
+																			<i class="fa fa-sort<?php echo isset($arr_data)&& is_array($arr_data) && isset($arr_data['column_name']) && $arr_data['column_name'] == "income" && isset($arr_data['sort_type']) && $arr_data['sort_type'] != "" ? "-" . $arr_data['sort_type'] : "" ?>" style="font-size:15px;"></i>
+																		</a> 
+																		
+																		
 																	</th>
 																	<th>
-																		Expenses
+																		
+																		<a class="sort_by" href="javascript:;" 
+																			data-orderbytable="" 
+																			data-orderbycolum="expenses" 
+																			data-sortingby="<?php echo (isset($arr_data)&& is_array($arr_data) && isset($arr_data['sort_type']) && $arr_data['sort_type'] == "asc") ? "desc" : "asc" ?>">
+																			Expenses &nbsp;
+																			<i class="fa fa-sort<?php echo isset($arr_data)&& is_array($arr_data) && isset($arr_data['column_name']) && $arr_data['column_name'] == "expenses" && isset($arr_data['sort_type']) && $arr_data['sort_type'] != "" ? "-" . $arr_data['sort_type'] : "" ?>" style="font-size:15px;"></i>
+																		</a> 
+																		
 																	</th>
 																	<th>
 																		Action
@@ -145,23 +181,26 @@
 																		</td>
 																		<td>
 																			<?php 
-																				if(isset($rowtrans->amount_type) AND $rowtrans->amount_type == 'income' AND isset($rowtrans->amount) AND $rowtrans->amount != "" AND is_numeric($rowtrans->amount))
+																				if(isset($rowtrans->amount_type) AND $rowtrans->amount_type == 'income' AND isset($rowtrans->income) AND $rowtrans->income != "" AND is_numeric($rowtrans->income))
 																				{
-																					echo "RM " . number_format($rowtrans->amount, 2);
+																					echo "RM " . number_format($rowtrans->income, 2);
 																				}
 																			?>
 																		</td>
 																		<td>
 																			<?php 
-																				if(isset($rowtrans->amount_type) AND $rowtrans->amount_type == 'expenses' AND isset($rowtrans->amount) AND $rowtrans->amount != "" AND is_numeric($rowtrans->amount))
+																				if(isset($rowtrans->amount_type) AND $rowtrans->amount_type == 'expenses' AND isset($rowtrans->expenses) AND $rowtrans->expenses != "" AND is_numeric($rowtrans->expenses))
 																				{
-																					echo "RM " . number_format($rowtrans->amount, 2);
+																					echo "RM " . number_format($rowtrans->expenses, 2);
 																				}
 																			?>
 																		</td>
 																		<td>
-																			<a href="<?php echo base_url() ?>index.php/ledger/edit/<?php echo (isset($rowtrans->id) AND $rowtrans->id > 0) ? $rowtrans->id : ''  ?>" class="btn btn-info m-btn m-btn--icon btn-sm m-btn--icon-only  m-btn--pill">
+																			<a href="<?php echo site_url() ?>/ledger/edit/<?php echo (isset($rowtrans->id) AND $rowtrans->id > 0) ? $rowtrans->id : ''  ?>" class="btn btn-info m-btn m-btn--icon btn-sm m-btn--icon-only  m-btn--pill">
 																				<i class="fa fa-edit"></i>
+																			</a>
+																			<a href="#" title="Delete this file" onclick="delete_record('<?php echo $rowtrans->id?>')" class="btn btn-danger m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill">
+																				<i class="fa fa-trash-o"></i>
 																			</a>
 																		</td>
 																	</tr>
@@ -306,6 +345,15 @@
 		<!-- end::Body -->
 		<?php $this->load->view('footer_v') ;?>
 		<script type="text/javascript">
+		
+			function delete_record(data_id) {
+				var respond = confirm("Are you sure to delete this record?");
+				
+				if(respond == true) {
+					$('#remove_data_id').val(data_id);
+					$('#remove_form').submit();	
+				}
+			}
 			
 			function ajax_list_table(dataform){
 				mApp.block('.table_list_content', {
@@ -317,7 +365,7 @@
 				});
 				
 				$.ajax({
-					url: base_url+"/user/ajax_sorting/",
+					url: base_url+"/ledger/ajax_sorting/",
 					method: "POST",
 					async:false,
 					data:dataform,
@@ -331,8 +379,8 @@
 				})
 			}
 			
-			$(function(){
-				
+			function date_range()
+			{
 				$('.transaction_date_range').daterangepicker({
 					buttonClasses: 'm-btn btn',
 					applyClass: 'btn-primary',
@@ -346,6 +394,13 @@
 				function(start, end, label) {
 					console.log("new range");
 					$('.transaction_date_range .form-control').val( start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+				});
+			}
+			
+			$(function(){
+				
+				$('body').on("focus", ".transaction_date_range", function(){
+					date_range();
 				});
 				
 				$('body').on("click", ".sort_by", function(){
@@ -366,6 +421,10 @@
 					$('.num-perpage').val(num_page);
 					var dataform = $('#search_sorting_form').serialize();
 					ajax_list_table(dataform);
+				});
+				
+				$('body').on("click", '.btnreset', function(){
+					window.location = base_url + "/ledger/listing"
 				});
 				
 			});

@@ -9,10 +9,7 @@ class Dashboard extends CI_Controller {
         parent::__construct();
         
         security_checking();
-        
-		// #Auto load the required model
- 		// $this->load->model('access_m');
-	
+       
 		$this->data["breadcrumb"] = array(
 			"Dashboard" => base_url() . "dasboard/"
 		);
@@ -27,19 +24,20 @@ class Dashboard extends CI_Controller {
 		redirect('dashboard/home');
 	}
 	
-	public function add()
-	{
-		$this->data["breadcrumb"]["Add User"] = base_url() . "dashboard/add";
-		$this->data['meta_title'] = 'Add record';
-		$this->data['meta_description'] = "Add new record transaction";
-		// ad($this->data);exit;
-		$this->load->view('base_page_v', $this->data);
-	}
-	
 	public function home()
 	{
+		$this->load->model('ledger_m');
+		
+		
 		$this->data['meta_title'] = 'Dashboard';
 		$this->data['meta_description'] = "Dashboard transaction";
+		$total_income = $this->ledger_m->calculate_income();
+		$total_expenses = $this->ledger_m->calculate_expenses();
+		
+		$this->data['total_income'] = $total_income;
+		$this->data['total_expenses'] = $total_expenses;
+		$this->data['net_income'] = $total_income - $total_expenses;
+		
 		$this->load->view('home_page_v', $this->data);
 	}
 }
