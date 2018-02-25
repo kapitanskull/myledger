@@ -1,6 +1,6 @@
 <?php
  
-class Ledger_m extends CI_Model {
+class Event_m extends CI_Model {
 	
     function __construct()
     {
@@ -8,15 +8,15 @@ class Ledger_m extends CI_Model {
         parent::__construct();
     }
 	
-	function transaction_list()
+	function event_list()
 	{
 		$where_sql = " WHERE `user_id` = " . $this->db->escape($this->session->userdata('id'));
 		
-		$query_count = "SELECT COUNT(`id`) AS total FROM `transaction_records`" . $where_sql;
+		$query_count = "SELECT COUNT(`id`) AS total FROM `event`" . $where_sql;
 		$query = $this->db->query($query_count)->row();
 		$data['total_rows'] = $query->total;
 
-		$config['base_url'] = site_url() . '/ledger/listing/';
+		$config['base_url'] = site_url() . '/event/listing/';
 		$config['uri_segment'] = 3;
 		$config['total_rows'] = $data['total_rows'];#num row data in the db
 		$config['per_page'] = PAGING_DEFAULT_LIMIT;#number of data be display
@@ -36,17 +36,9 @@ class Ledger_m extends CI_Model {
 			}
 		}
 		
-		$query_data = "SELECT * FROM `transaction_records` " . $where_sql . " ORDER BY `date` ASC " . $limit_sql;
+		$query_data = "SELECT * FROM `event` " . $where_sql . " ORDER BY `event_start_datetime` ASC " . $limit_sql;
 		
 		$data['query'] = $this->db->query($query_data);
-		
-		#calculate total income,net income,expenses from db
-		$total_income = $this->calculate_income();
-		$total_expenses = $this->calculate_expenses();
-		
-		$data['total_income'] = $total_income;
-		$data['total_expenses'] = $total_expenses;
-		$data['net_income'] = $total_income - $total_expenses;
 
 		return $data;
 	}
@@ -58,7 +50,7 @@ class Ledger_m extends CI_Model {
 		#as object
 		$post = json_decode(decrypt_base64($keyword64));
 		
-		$order_sql = " ORDER BY `date` ASC"; //by default sorting
+		$order_sql = " ORDER BY `event_start_datetime` ASC"; //by default sorting
 		$per_page_data = PAGING_DEFAULT_LIMIT;
 		
 		if(isset($post->transaction_date_range) && $post->transaction_date_range != '')
@@ -102,7 +94,7 @@ class Ledger_m extends CI_Model {
 		$query = $this->db->query($sql_count)->row();
 		
 		#for pagination button we link to ajax function so next content will generate using ajax
-		$config['base_url'] = site_url() . '/ledger/search/' . $keyword64 . '/';
+		$config['base_url'] = site_url() . '/event/search/' . $keyword64 . '/';
 		$data['total_rows'] = $query->total;		
 		$config['uri_segment'] = 4;
 		$config['total_rows'] = $data['total_rows'];
@@ -125,7 +117,7 @@ class Ledger_m extends CI_Model {
 			}
 		}
 		
-		$sql_query = "SELECT * FROM `transaction_records` " . $where_sql . $order_sql . $sql_limit;
+		$sql_query = "SELECT * FROM `event` " . $where_sql . $order_sql . $sql_limit;
 		$data['query'] = $this->db->query($sql_query);
 		
 		#calculate total income,net income,expenses from db
@@ -139,83 +131,96 @@ class Ledger_m extends CI_Model {
 		return $data;
 	}
 	
-	function save_transaction($data = array()){
+	function save_event($data = array()){
+		$arr_start_date = array();
+		$arr_end_date = array();
 		
-		$DBdata = array(
-	    	'description' => trim($data['description']),
-			'amount_type' => trim($data['amount_type']),
-	    	'user_id' => trim($this->session->userdata('id')),
-	    );
-		
-		$id = isset($data['id']) ? $data['id'] : 0;
-		$date = $data['date'];
-		$amount = $data['amount'];
-		
-		if($date == '') {
-	    	set_message("Please select date.", "danger");
-	    	return false;
-	    }
-		
-		if($DBdata['description'] == '') {
-	    	set_message("Please enter description.", "danger");
-	    	return false;
-	    }
-		
-		if($DBdata['amount_type'] == '') {
-	    	set_message("Please select transaction type.", "danger");
-	    	return false;
-	    }
-		
-		if($amount == '') {
-	    	set_message("Please enter amount.", "danger");
-	    	return false;
-	    }
-		
-		if(!is_numeric($amount)) {
-	    	set_message("Contain number only", "danger");
-	    	return false;
-	    }
-		
-		if($amount <= 0) {
-	    	set_message("Amount at least RM 1.00", "danger");
-	    	return false;
-	    }
-		
-		if($DBdata['amount_type'] == 'income')
+		if(sizeof($data) > 0)
 		{
-			$DBdata['income'] = trim($amount);
-			$DBdata['expenses'] = "";
+			$DBdata = array(
+				'event_title' => trim($data['event_title']),
+				'event_description' => trim($data['event_description']),
+				'event_start_datetime' => trim($data['event_start_datetime']),
+				'event_end_datetime' => trim($data['event_end_datetime']),
+				'user_id' => trim($this->session->userdata('id')),
+				'create_by' => trim($this->session->userdata('id')),
+				'create_date' => trim(date('Y-m-d H:i:s')),
+			);
+			
+			$id = isset($data['id']) ? $data['id'] : 0;
+			$DBdata['all_day'] = isset($data['all_day']) ? $data['all_day'] : 0;
+			
+			if($DBdata['event_title'] == '') {
+				set_message("Please enter event title.", "danger");
+				return false;
+			}
+			
+			if($DBdata['event_start_datetime'] == '') {
+				set_message("Please set event start datetime", "danger");
+				return false;
+			}
+			
+			if($DBdata['event_end_datetime'] != '') 
+			{
+				$arr_end_date = explode(' ', $DBdata['event_end_datetime']);
+				
+				if(is_array($arr_end_date) AND sizeof($arr_end_date) == 2)
+				{
+					$end_date = datepicker2mysql($arr_end_date[0]);
+					$arr_end_date[0] = $end_date;
+					$arr_end_date[1] = $arr_end_date[1] . ":00";
+					$DBdata['event_end_datetime'] = implode(' ', $arr_end_date);
+				}
+			}
+			
+			#explode to separate date and time and need to convert date into mysql datetime
+			$arr_start_date = explode(' ', $DBdata['event_start_datetime']);
+			if(is_array($arr_start_date) AND sizeof($arr_start_date) == 2)
+			{
+				$start_date = datepicker2mysql($arr_start_date[0]);
+				$arr_start_date[0] = $start_date;
+				$arr_start_date[1] = $arr_start_date[1] . ":00";
+				$DBdata['event_start_datetime'] = implode(' ', $arr_start_date);
+			}
+			
+			if($DBdata['event_end_datetime'] != '')
+			{
+				#check date end must bigger thant start date
+				if(strtotime($DBdata['event_end_datetime']) < strtotime($DBdata['event_start_datetime']))
+				{
+					set_message("End date time must more than start date time", "danger");
+					return false;
+				}
+			}
+			
+			if(isset($id) && $id > 0){
+				
+				$DBdata['update_by'] = trim($this->session->userdata('id'));
+				$DBdata['update_date'] = trim($this->session->userdata('id'));
+				$this->db->where('id', $id);
+				$rs = $this->db->update('event', $DBdata); 
+				set_message("Update success.");
+				audit_trail($this->db->last_query(), 'event_m.php', 'save_event()', 'Update event Details');
+			}
+			else{
+				$rs = $this->db->insert('event', $DBdata);
+				set_message("Event recorded.");
+				audit_trail($this->db->last_query(), 'event_m.php', 'save_event()', 'Create New event');
+			}
+				
+			return $rs;
 		}
-		elseif($DBdata['amount_type'] == 'expenses')
+		else
 		{
-			$DBdata['income'] = "";
-			$DBdata['expenses'] = trim($amount);
+			set_message('No data been post');
+			return false;
 		}
-		
-		$arr_date = explode('/', $date);
-		
-		$DBdata['date'] = $arr_date[2] . '-' . $arr_date[1] . '-' . $arr_date[0];
-		
-		if(isset($id) && $id > 0){
-			
-			$this->db->where('id', $id);
-			$rs = $this->db->update('transaction_records', $DBdata); 
-			set_message("Update success.");
-			audit_trail($this->db->last_query(), 'ledger_m.php', 'save_transaction()', 'Update transaction Details');
-		}
-		else{
-			$rs = $this->db->insert('transaction_records', $DBdata);
-			set_message("Transaction recorded .");
-			audit_trail($this->db->last_query(), 'ledger_m.php', 'save_transaction()', 'Create New transaction');
-		}
-			
-		return $rs;
 	}
 	
 	
-	function get_transaction($id = 0){
+	function get_event($id = 0){
 		if($id > 0){
-			$sql = "SELECT * FROM `transaction_records` WHERE `id` = " . $this->db->escape($id) . " AND `user_id` = " . $this->db->escape($this->session->userdata('id')) . " LIMIT 1";
+			$sql = "SELECT * FROM `event` WHERE `id` = " . $this->db->escape($id) . " AND `user_id` = " . $this->db->escape($this->session->userdata('id')) . " LIMIT 1";
 			$q = $this->db->query($sql);
 			
 			return $q->num_rows() > 0 ? $q->row() : false;
@@ -225,15 +230,15 @@ class Ledger_m extends CI_Model {
 		
 	}
 	
-	function delete_transaction(){
+	function delete_event(){
 		$id = $this->input->post('remove_data_id');
 		
-		$sql = "DELETE FROM `transaction_records` WHERE `id` = " . $this->db->escape($id) . " AND `user_id` = " .  $this->db->escape($this->session->userdata('id')) . " LIMIT 1";
+		$sql = "DELETE FROM `event` WHERE `id` = " . $this->db->escape($id) . " AND `user_id` = " .  $this->db->escape($this->session->userdata('id')) . " LIMIT 1";
 		$query = $this->db->query($sql);
 		
 		if($this->db->affected_rows() > 0) {
 			set_message("Successfully delete data.");
-			audit_trail($this->db->last_query(), 'ledger_m.php', 'delete_transaction()', 'Delete transaction');
+			audit_trail($this->db->last_query(), 'event_m.php', 'delete_event()', 'Delete event');
 			
 			return true;
 		} 

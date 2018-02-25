@@ -192,7 +192,23 @@
 											<a  href="<?php echo site_url() ?>/ledger/add" class="m-menu__link">
 												<span class="m-menu__item-here"></span>
 												<span class="m-menu__link-text">
-													<?php echo (isset($menu_name) AND $menu_name != "") ? $menu_name : "Add Transaction" ?>
+													<?php echo (isset($controller) AND strtolower($controller) == 'ledger' AND isset($function) AND $function == 'edit' AND isset($menu_name) AND $menu_name != "") ? $menu_name : "Add Transaction" ?>
+												</span>
+											</a>
+										</li>
+										<li class="m-menu__item m-menu__item--submenu m-menu__item--rel <?php echo (isset($controller) AND strtolower($controller) == 'event' AND isset($function) AND $function == 'listing') ? 'm-menu__item--active' : ''  ?>"  data-menu-submenu-toggle="click" aria-haspopup="true">
+											<a  href="<?php echo site_url() ?>/event/listing" class="m-menu__link">
+												<span class="m-menu__item-here"></span>
+												<span class="m-menu__link-text">
+													Event Listing
+												</span>
+											</a>
+										</li>
+										<li class="m-menu__item m-menu__item--submenu m-menu__item--rel <?php echo (isset($controller) AND strtolower($controller) == 'event' AND ((isset($function) AND $function == 'add') OR (isset($function) AND $function == 'edit') )) ? 'm-menu__item--active' : ''  ?>"  data-menu-submenu-toggle="click" aria-haspopup="true">
+											<a  href="<?php echo site_url() ?>/event/add" class="m-menu__link">
+												<span class="m-menu__item-here"></span>
+												<span class="m-menu__link-text">
+													<?php echo (isset($controller) AND strtolower($controller) == 'event' AND isset($function) AND $function == 'edit' AND isset($menu_name) AND $menu_name != "") ? $menu_name : "Add Event" ?>
 												</span>
 											</a>
 										</li>

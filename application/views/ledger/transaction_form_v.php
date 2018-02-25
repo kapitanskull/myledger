@@ -31,7 +31,7 @@
 										</div>
 									</div>
 									<!--begin::Form-->
-									<form class="m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed" action="<?php echo base_url() ?>index.php/ledger/add" method='post'>
+									<form class="m-form m-form--fit m-form--label-align-right m-form--group-seperator-dashed" action="<?php echo site_url() ?>/ledger/add" method='post'>
 										<div class="m-portlet__body">
 											<div class="form-group m-form__group row">
 												<label class="col-md-2 col-form-label">

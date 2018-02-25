@@ -121,6 +121,11 @@ class Ledger extends CI_Controller {
 						$this->data["row"]->$key = $value;
 					}
 				}
+				
+				if(isset($this->data["row"]->id) AND $this->data["row"]->id > 0)
+				{
+					redirect('ledger/edit/' . $this->data["row"]->id);
+				}
 			}
 			
 			// #Successfully saved and redirect back to this function without $_POST
@@ -152,9 +157,14 @@ class Ledger extends CI_Controller {
 			{
 				$date = date('d/m/Y', strtotime($this->data['row']->date));
 				$this->data['row']->date = $date;
+				
+				$this->load->view('ledger/transaction_form_v', $this->data);
 			}
-			
-			$this->load->view('ledger/transaction_form_v', $this->data);
+			else
+			{
+				set_message('Data not available','danger');
+				redirect('ledger/listing');
+			}
 		}
 		else
 		{

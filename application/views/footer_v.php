@@ -43,9 +43,9 @@
 	<script src="<?php echo base_url() ?>assets/vendors/custom/fullcalendar/fullcalendar.bundle.js" type="text/javascript"></script>
 	<!--end::Page Vendors -->  
 	<!--begin::Page Snippets -->
-	<script src="<?php echo base_url() ?>assets/app/js/dashboard.js?v=<?php echo time(); ?>" type="text/javascript"></script>
 	<!--end::Page Snippets -->
 	<script type="text/javascript">
+		
 		var error_toast = function()
 		{
 			toastr.options = {
@@ -68,4 +68,5 @@
 
 			toastr.error("An error occur in server side.", "Error");
 		}
+		
 	</script>

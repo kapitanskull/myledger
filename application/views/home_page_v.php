@@ -166,7 +166,7 @@
 										<div class="m-portlet__head-tools">
 											<ul class="m-portlet__nav">
 												<li class="m-portlet__nav-item">
-													<a href="#" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air">
+													<a href="<?php echo site_url() ?>/event/add" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air">
 														<span>
 															<i class="la la-plus"></i>
 															<span>
@@ -192,6 +192,187 @@
 		</div>
 		<!-- end::Body -->
 		<?php $this->load->view('footer_v') ;?>
+		<script type="text/javascript">
+		var calendarInit = function() {
+			if ($('#m_calendar').length === 0) {
+				return;
+			}
+			
+			var todayDate = moment().startOf('day');
+			var YM = todayDate.format('YYYY-MM');
+			console.log(YM + "today");
+			var YESTERDAY = todayDate.clone().subtract(1, 'day').format('YYYY-MM-DD');
+			var TODAY = todayDate.format('YYYY-MM-DD');
+			var TOMORROW = todayDate.clone().add(1, 'day').format('YYYY-MM-DD');
+
+			$('#m_calendar').fullCalendar({
+				header: {
+					left: 'prev,next today',
+					center: 'title',
+					right: 'month,agendaWeek,agendaDay,listWeek'
+				},
+				editable: true,
+				eventLimit: true, // allow "more" link when too many events
+				navLinks: true,
+				defaultDate: moment('<?php echo date('Y-m-d') ?>'),
+				events: [
+					{
+						title: 'Meeting',
+						start: moment('2018-02-01'),
+						allDay:true,
+						description: 'Lorem ipsum dolor sit incid idunt ut',
+						className: "m-fc-event--light m-fc-event--solid-warning"
+					},
+					{
+						title: 'Conference',                    
+						description: 'try2 sajae',
+						start: moment(YM + '-26T13:30:00'),
+						end: moment(YM + '-27T17:30:00'),
+						className: "m-fc-event--accent"
+					},
+					{
+						title: 'Dinner',
+						start: moment('2017-08-30'),
+						description: 'Lorem ipsum dolor sit tempor incid',
+						className: "m-fc-event--light  m-fc-event--solid-danger"
+					},
+					{
+						title: 'All Day Event',
+						start: moment(YM + '-01'),
+						description: 'all datdfd',
+						className: "m-fc-event--danger m-fc-event--solid-focus"
+					},
+					{
+						title: 'Reporting',                    
+						description: 'Lorem ipsum dolor incid idunt ut labore',
+						start: moment('2017-09-03T13:30:00'),
+						end: moment('2017-09-04T17:30:00'),
+						className: "m-fc-event--accent"
+					},
+					{
+						title: 'Company Trip',
+						start: moment(YM + '-05'),
+						end: moment(YM + '-07'),
+						description: 'Lorem ipsum dolor sit tempor incid',
+						className: "m-fc-event--primary"
+					},
+					{
+						title: 'ICT Expo 2017 - Product Release',
+						start: moment('2017-09-09'),
+						description: 'Lorem ipsum dolor sit tempor inci',
+						className: "m-fc-event--light m-fc-event--solid-primary"
+					},
+					{
+						title: 'Dinner',
+						start: moment('2017-09-12'),
+						description: 'Lorem ipsum dolor sit amet, conse ctetur'
+					},
+					{
+						id: 999,
+						title: 'Repeating Event',
+						start: moment( YM + '09-15T16:00:00'),
+						description: 'Lorem ipsum dolor sit ncididunt ut labore',
+						className: "m-fc-event--danger"
+					},
+					{
+						id: 1000,
+						title: 'Repeating Event',
+						description: 'zs ipsum dolor sit amet, labore',
+						start: YM +'-24T12:00:00',
+						end: YM +'-26T15:00:00',
+					},
+					{
+						title: 'Conference',
+						start: moment('2017-09-20T13:00:00'),
+						end: moment('2017-09-21T19:00:00'),
+						description: 'Lorem ipsum dolor eius mod tempor labore',
+						className: "m-fc-event--accent"
+					},
+					{
+						title: 'Meeting',
+						start: moment('2017-09-11'),
+						description: 'Lorem ipsum dolor eiu idunt ut labore'
+					},
+					{
+						title: 'Lunch',
+						start: moment('2017-09-18'),
+						className: "m-fc-event--info m-fc-event--solid-accent",
+						description: 'Lorem ipsum dolor sit amet, ut labore'
+					},
+					{
+						title: 'Meeting',
+						start: moment('2017-09-24'),
+						className: "m-fc-event--warning",
+						description: 'Lorem ipsum conse ctetur adipi scing'
+					},
+					{
+						title: 'Happy Hour',
+						start: moment('2017-09-24'),
+						className: "m-fc-event--light m-fc-event--solid-focus",
+						description: 'Lorem ipsum dolor sit amet, conse ctetur'
+					},
+					{
+						title: 'Dinner',
+						start: moment('2017-09-24'),
+						className: "m-fc-event--solid-focus m-fc-event--light",
+						description: 'Lorem ipsum dolor sit ctetur adipi scing'
+					},
+					{
+						title: 'Birthday Party',
+						start: moment('2017-09-24'),
+						className: "m-fc-event--primary",
+						description: 'Lorem ipsum dolor sit amet, scing'
+					},
+					{
+						title: 'Company Event',
+						start: moment('2017-09-24'),
+						className: "m-fc-event--danger",
+						description: 'Lorem ipsum dolor sit amet, scing'
+					},
+					{
+						title: 'Click for Google',
+						url: 'http://google.com/',
+						start: moment('2017-09-26'),
+						className: "m-fc-event--solid-info m-fc-event--light",
+						description: 'Lorem ipsum dolor sit amet, labore'
+					}
+				],
+
+				eventRender: function(event, element) {
+					if (element.hasClass('fc-day-grid-event')) {
+						element.data('content', event.description);
+						element.data('placement', 'top');
+						mApp.initPopover(element);
+					} else if (element.hasClass('fc-time-grid-event')) {
+						element.find('.fc-title').append('<div class="fc-description">' + event.description + '</div>');
+					} else if (element.find('.fc-list-item-title').lenght !== 0) {
+						element.find('.fc-list-item-title').append('<div class="fc-description">' + event.description + '</div>');
+					}
+				},
+				
+				eventDrop: function(event, delta, revertFunc) {
+				console.log(event);
+				if(event.end != null)
+				{
+					alert("event all day =" + event.allDay+ event.id  + "===" + event.title + " was dropped on start " + event.start.format() + " AND end on " + event.end.format());
+				}
+				else
+				{
+					alert("event all day =" + event.allDay  + event.id + "===" + event.title + " was dropped on start " + event.start.format());
+				}
+
+					if (!confirm("Are you sure about this change?")) {
+						revertFunc();
+					}
+
+				}
+			});
+		}
+		
+		$(function(){
+			calendarInit();
+		});
+	</script>
 		
 		</body>
 	<!-- end::Body -->

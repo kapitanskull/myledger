@@ -16,8 +16,9 @@ class Dashboard extends CI_Controller {
 		
 		$this->data['controller'] = 'dashboard';
 		$this->data['function'] = $this->uri->segment(2);
+		
+		// echo date('Y-m-d H:i:s', strtotime('2018-02-23T12:00:00'));exit;
 	}
-	
 
 	public function index()
 	{
