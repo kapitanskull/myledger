@@ -43,7 +43,7 @@ class Event_m extends CI_Model {
 		return $data;
 	}
 	
-	function search_transaction($keyword64)
+	function search_event($keyword64)
 	{
 		$where_sql = "WHERE `user_id` = " . $this->session->userdata('id');
 		
@@ -56,18 +56,39 @@ class Event_m extends CI_Model {
 		if(isset($post->transaction_date_range) && $post->transaction_date_range != '')
 		{
 			$date_range = explode("-", $post->transaction_date_range);
-			if(is_array($date_range) AND sizeof($date_range) > 0)
+			
+			if(is_array($date_range) AND sizeof($date_range) == 2)
 			{
-				$start_date = datepicker2mysql(trim($date_range[0]));	
-				$end_date = datepicker2mysql(trim($date_range[1]));
+				$arr_start_date = explode(' ', trim($date_range[0]));
 				
-				$where_sql .= ($where_sql == '' ? " WHERE " : " AND ") . " (`date` >= " . $this->db->escape($start_date) . " AND `date` <= " . $this->db->escape($end_date) . ")";
+				if(is_array($arr_start_date) AND sizeof($arr_start_date) == 2)
+				{
+					$start_date = datepicker2mysql($arr_start_date[0]);
+					$arr_start_date[0] = $start_date;
+					$arr_start_date[1] = $arr_start_date[1] . ":00";
+					
+					$startDate = implode(' ', $arr_start_date);
+				}
+				
+				$arr_end_date = explode(' ', trim($date_range[1]));
+				if(is_array($arr_end_date) AND sizeof($arr_end_date) == 2)
+				{
+					$end_date = datepicker2mysql($arr_end_date[0]);
+					$arr_end_date[0] = $end_date;
+					$arr_end_date[1] = $arr_end_date[1] . ":00";
+					
+					$endDate = implode(' ', $arr_end_date);
+				}
+				
+				#refer this list about this sql condition (http://wiki.lessthandot.com/index.php/Date_Range_WHERE_Clause_Simplification)
+				if(isset($startDate) AND isset($endDate))
+					$where_sql .= ($where_sql == '' ? " WHERE " : " AND ") . " (`event_start_datetime` < " . $this->db->escape(trim($endDate)) . " AND `event_end_datetime` >= " . $this->db->escape(trim($startDate)) . ")";
 			}
 		}
 		
 		//searching
 	    if(isset($post->column_name) && $post->keyword_search != '') {
-		    $where_sql = " WHERE `description` LIKE " . $this->db->escape('%' . $post->keyword_search . '%') . " OR `amount_type` LIKE " . $this->db->escape('%' . $post->keyword_search . '%') . " OR `income` LIKE " . $this->db->escape('%' . $post->keyword_search . '%') . " OR `expenses` LIKE " . $this->db->escape('%' . $post->keyword_search . '%');
+		    $where_sql = " WHERE `event_title` LIKE " . $this->db->escape('%' . $post->keyword_search . '%') . " OR `event_description` LIKE " . $this->db->escape('%' . $post->keyword_search . '%') . " OR `event_start_datetime` LIKE " . $this->db->escape('%' . $post->keyword_search . '%') . " OR `event_end_datetime` LIKE " . $this->db->escape('%' . $post->keyword_search . '%');
 	    }
 		
 		//for sorting
@@ -90,7 +111,7 @@ class Event_m extends CI_Model {
 			$data['forjquery_enddate'] = trim($date_range[1]);
 		}
 		
-		$sql_count = "SELECT COUNT(id) AS total FROM `transaction_records` " . $where_sql;
+		$sql_count = "SELECT COUNT(id) AS total FROM `event` " . $where_sql;
 		$query = $this->db->query($sql_count)->row();
 		
 		#for pagination button we link to ajax function so next content will generate using ajax
@@ -118,15 +139,8 @@ class Event_m extends CI_Model {
 		}
 		
 		$sql_query = "SELECT * FROM `event` " . $where_sql . $order_sql . $sql_limit;
+		
 		$data['query'] = $this->db->query($sql_query);
-		
-		#calculate total income,net income,expenses from db
-		$total_income = $this->calculate_income();
-		$total_expenses = $this->calculate_expenses();
-		
-		$data['total_income'] = $total_income;
-		$data['total_expenses'] = $total_expenses;
-		$data['net_income'] = $total_income - $total_expenses;
 		
 		return $data;
 	}
@@ -166,7 +180,7 @@ class Event_m extends CI_Model {
 				
 				if(is_array($arr_end_date) AND sizeof($arr_end_date) == 2)
 				{
-					$end_date = datepicker2mysql($arr_end_date[0]);
+					$end_date = datepicker2mysql(trim($arr_end_date[0]));
 					$arr_end_date[0] = $end_date;
 					$arr_end_date[1] = $arr_end_date[1] . ":00";
 					$DBdata['event_end_datetime'] = implode(' ', $arr_end_date);
@@ -177,10 +191,20 @@ class Event_m extends CI_Model {
 			$arr_start_date = explode(' ', $DBdata['event_start_datetime']);
 			if(is_array($arr_start_date) AND sizeof($arr_start_date) == 2)
 			{
-				$start_date = datepicker2mysql($arr_start_date[0]);
+				$start_date = datepicker2mysql(trim($arr_start_date[0]));
 				$arr_start_date[0] = $start_date;
 				$arr_start_date[1] = $arr_start_date[1] . ":00";
 				$DBdata['event_start_datetime'] = implode(' ', $arr_start_date);
+				
+				
+				#if end date time empty will set date as start date and time will be 23:59:59
+				if($DBdata['event_end_datetime'] == '')
+				{
+					echo "masuk2";
+					$arr_end_date[0] = $start_date;
+					$arr_end_date[1] = "23:59:59";
+					$DBdata['event_end_datetime'] = implode(' ', $arr_end_date);
+				}
 			}
 			
 			if($DBdata['event_end_datetime'] != '')
@@ -216,7 +240,6 @@ class Event_m extends CI_Model {
 			return false;
 		}
 	}
-	
 	
 	function get_event($id = 0){
 		if($id > 0){
@@ -271,6 +294,4 @@ class Event_m extends CI_Model {
 		else
 			return 0;
 	}
-	
-	
 }

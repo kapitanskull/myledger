@@ -178,7 +178,7 @@
 											</ul>
 										</div>
 									</div>
-									<div class="m-portlet__body">
+									<div class="m-portlet__body calender_body">
 										<div id="m_calendar"></div>
 									</div>
 								</div>
@@ -211,68 +211,78 @@
 					center: 'title',
 					right: 'month,agendaWeek,agendaDay,listWeek'
 				},
-				editable: true,
+				
 				eventLimit: true, // allow "more" link when too many events
 				navLinks: true,
 				defaultDate: moment('<?php echo date('Y-m-d') ?>'),
+				googleCalendarApiKey: 'AIzaSyBbh8fohxsGJ8I2fkSZr-w5_RlPZ5k0IqI',
 				events: [
 					{
 						title: 'Meeting',
 						start: moment('2018-02-01'),
 						allDay:true,
 						description: 'Lorem ipsum dolor sit incid idunt ut',
-						className: "m-fc-event--light m-fc-event--solid-warning"
+						className: "m-fc-event--light m-fc-event--solid-warning",
+						editable: true,
 					},
 					{
 						title: 'Conference',                    
 						description: 'try2 sajae',
 						start: moment(YM + '-26T13:30:00'),
-						end: moment(YM + '-27T17:30:00'),
-						className: "m-fc-event--accent"
+						end: moment(YM + '-26T23:59:59'),
+						className: "m-fc-event--accent",
+						editable: true,
 					},
 					{
 						title: 'Dinner',
 						start: moment('2017-08-30'),
 						description: 'Lorem ipsum dolor sit tempor incid',
-						className: "m-fc-event--light  m-fc-event--solid-danger"
+						className: "m-fc-event--light  m-fc-event--solid-danger",
+						editable: true,
 					},
 					{
 						title: 'All Day Event',
 						start: moment(YM + '-01'),
-						description: 'all datdfd',
-						className: "m-fc-event--danger m-fc-event--solid-focus"
+						description: 'all datdfd boleh klik',
+						className: "m-fc-event--danger m-fc-event--solid-focus m-fc-event-kapitan",
+						editable: true,
 					},
 					{
 						title: 'Reporting',                    
 						description: 'Lorem ipsum dolor incid idunt ut labore',
 						start: moment('2017-09-03T13:30:00'),
 						end: moment('2017-09-04T17:30:00'),
-						className: "m-fc-event--accent"
+						className: "m-fc-event--accent m-fc-event-kapitan",
+						editable: true,
 					},
 					{
 						title: 'Company Trip',
 						start: moment(YM + '-05'),
 						end: moment(YM + '-07'),
 						description: 'Lorem ipsum dolor sit tempor incid',
-						className: "m-fc-event--primary"
+						className: "m-fc-event--primary",
+						editable: true,
 					},
 					{
 						title: 'ICT Expo 2017 - Product Release',
 						start: moment('2017-09-09'),
 						description: 'Lorem ipsum dolor sit tempor inci',
-						className: "m-fc-event--light m-fc-event--solid-primary"
+						className: "m-fc-event--light m-fc-event--solid-primary",
+						editable: true,
 					},
 					{
 						title: 'Dinner',
 						start: moment('2017-09-12'),
-						description: 'Lorem ipsum dolor sit amet, conse ctetur'
+						description: 'Lorem ipsum dolor sit amet, conse ctetur',
+						editable: true,
 					},
 					{
 						id: 999,
 						title: 'Repeating Event',
 						start: moment( YM + '09-15T16:00:00'),
 						description: 'Lorem ipsum dolor sit ncididunt ut labore',
-						className: "m-fc-event--danger"
+						className: "m-fc-event--danger m-fc-event-kapitan",
+						editable: true,
 					},
 					{
 						id: 1000,
@@ -280,53 +290,60 @@
 						description: 'zs ipsum dolor sit amet, labore',
 						start: YM +'-24T12:00:00',
 						end: YM +'-26T15:00:00',
+						editable: true,
 					},
 					{
 						title: 'Conference',
 						start: moment('2017-09-20T13:00:00'),
 						end: moment('2017-09-21T19:00:00'),
 						description: 'Lorem ipsum dolor eius mod tempor labore',
-						className: "m-fc-event--accent"
+						className: "m-fc-event--accent",
+						editable: true,
 					},
 					{
 						title: 'Meeting',
 						start: moment('2017-09-11'),
-						description: 'Lorem ipsum dolor eiu idunt ut labore'
+						description: 'Lorem ipsum dolor eiu idunt ut labore',
+						editable: true,
 					},
 					{
 						title: 'Lunch',
 						start: moment('2017-09-18'),
-						className: "m-fc-event--info m-fc-event--solid-accent",
-						description: 'Lorem ipsum dolor sit amet, ut labore'
+						className: "m-fc-event--info m-fc-event--solid-accent m-fc-event-kapitan",
+						description: 'Lorem ipsum dolor sit amet, ut labore',
+						editable: true,
 					},
 					{
 						title: 'Meeting',
 						start: moment('2017-09-24'),
-						className: "m-fc-event--warning",
-						description: 'Lorem ipsum conse ctetur adipi scing'
+						className: "m-fc-event--warning m-fc-event-kapitan",
+						description: 'Lorem ipsum conse ctetur adipi scing',
+						editable: true,
 					},
 					{
 						title: 'Happy Hour',
 						start: moment('2017-09-24'),
-						className: "m-fc-event--light m-fc-event--solid-focus",
-						description: 'Lorem ipsum dolor sit amet, conse ctetur'
+						className: "m-fc-event--light m-fc-event--solid-focus m-fc-event-kapitan",
+						description: 'Lorem ipsum dolor sit amet, conse ctetur',
+						editable: true,
 					},
 					{
 						title: 'Dinner',
 						start: moment('2017-09-24'),
-						className: "m-fc-event--solid-focus m-fc-event--light",
-						description: 'Lorem ipsum dolor sit ctetur adipi scing'
+						className: "m-fc-event--solid-focus m-fc-event--light m-fc-event-kapitan",
+						description: 'Lorem ipsum dolor sit ctetur adipi scing',
+						editable: true,
 					},
 					{
 						title: 'Birthday Party',
 						start: moment('2017-09-24'),
-						className: "m-fc-event--primary",
+						className: "m-fc-event--primary m-fc-event-kapitan",
 						description: 'Lorem ipsum dolor sit amet, scing'
 					},
 					{
 						title: 'Company Event',
 						start: moment('2017-09-24'),
-						className: "m-fc-event--danger",
+						className: "m-fc-event--danger m-fc-event-kapitan",
 						description: 'Lorem ipsum dolor sit amet, scing'
 					},
 					{
@@ -339,6 +356,17 @@
 				],
 
 				eventRender: function(event, element) {
+					element.on('click', function (e) {
+						console.log(element);
+						if(element.hasClass('m-fc-event-kapitan'))
+						{
+							alert("window.location = will redirect cetain place means this event has class name = m-fc-event-kapitan");
+						}
+						// if (element.closest('.fc-day-grid-event').length > 0) {
+							// e.preventDefault();
+						// }
+					});
+					
 					if (element.hasClass('fc-day-grid-event')) {
 						element.data('content', event.description);
 						element.data('placement', 'top');
@@ -351,27 +379,36 @@
 				},
 				
 				eventDrop: function(event, delta, revertFunc) {
-				console.log(event);
-				if(event.end != null)
-				{
-					alert("event all day =" + event.allDay+ event.id  + "===" + event.title + " was dropped on start " + event.start.format() + " AND end on " + event.end.format());
-				}
-				else
-				{
-					alert("event all day =" + event.allDay  + event.id + "===" + event.title + " was dropped on start " + event.start.format());
-				}
+					console.log(event);
+					if(event.end != null)
+					{
+						alert("event all day =" + event.allDay+ event.id  + "===" + event.title + " was dropped on start " + event.start.format() + " AND end on " + event.end.format());
+					}
+					else
+					{
+						alert("event all day =" + event.allDay  + event.id + "===" + event.title + " was dropped on start " + event.start.format());
+					}
 
 					if (!confirm("Are you sure about this change?")) {
 						revertFunc();
 					}
-
-				}
+				},
+				
+				eventClick: function(event) {
+                    // opens events in a popup window
+                    // window.open(event.url, 'gcalevent', 'width=700,height=600');
+					if (event.url) {
+						return false;
+					}
+                },
 			});
 		}
 		
 		$(function(){
 			calendarInit();
+			$('#m_calendar').fullCalendar('addEventSource', 'en.malaysia#holiday@group.v.calendar.google.com');	 
 		});
+	
 	</script>
 		
 		</body>

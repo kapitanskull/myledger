@@ -57,7 +57,7 @@
 													<div class="col-md-8">
 														<form id="search_sorting_form" action="<?php echo site_url() ?>/event/search" method="post">
 															<div class="form-group m-form__group row">
-																<div class="col-md-4">
+																<div class="col-md-5">
 																	<div class='input-group transaction_date_range'>
 																		<input type='text' name="transaction_date_range" class="form-control m-input transaction-date" readonly  placeholder="Select date range" value="<?php echo (isset($arr_data)&& is_array($arr_data) && isset($arr_data['transaction_date_range']) && $arr_data['transaction_date_range'] != "") ? $arr_data['transaction_date_range'] : "" ?>"/>
 																		<div class="input-group-append">
@@ -67,7 +67,7 @@
 																		</div>
 																	</div>
 																</div>
-																<div class="col-md-6 ml-auto">
+																<div class="col-md-5 ml-auto">
 																	<div class="form-group m-form__group">
 																		<div class="input-group">
 																			<input type="text" name="keyword_search" class="form-control" placeholder="Search" value="<?php echo (isset($arr_data)&& is_array($arr_data) && isset($arr_data['keyword_search']) && $arr_data['keyword_search'] != "") ? $arr_data['keyword_search'] : "" ?>" >
@@ -279,7 +279,7 @@
 				});
 				
 				$.ajax({
-					url: base_url+"/ledger/ajax_sorting/",
+					url: base_url+"/event/ajax_sorting/",
 					method: "POST",
 					async:false,
 					data:dataform,
@@ -301,13 +301,13 @@
 					cancelClass: 'btn-secondary',
 					startDate: "<?php echo (isset($arr_data['forjquery_startdate']) AND $arr_data['forjquery_startdate'] != '') ? $arr_data['forjquery_startdate'] : date('d/m/Y')?>",
 					endDate: "<?php echo (isset($arr_data['forjquery_enddate']) AND $arr_data['forjquery_enddate'] != '') ? $arr_data['forjquery_enddate'] : date('d/m/Y') ?>",
+					timePicker: true,
+					timePicker24Hour:true,
 					locale: {
-						format: 'DD/MM/YYYY'
+						format: 'DD/MM/YYYY HH:mm'
 					}
-				}, 
-				function(start, end, label) {
-					console.log("new range");
-					$('.transaction_date_range .form-control').val( start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+				}, function(start, end, label) {
+					$('.transaction_date_range .form-control').val( start.format('DD/MM/YYYY HH:mm') + ' - ' + end.format('DD/MM/YYYY HH:mm'));
 				});
 			}
 			
@@ -338,7 +338,7 @@
 				});
 				
 				$('body').on("click", '.btnreset', function(){
-					window.location = base_url + "/ledger/listing"
+					window.location = base_url + "/event/listing"
 				});
 				
 			});

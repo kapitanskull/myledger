@@ -79,7 +79,9 @@
 														</div>
 													</div>
 													<span class="m-form__help">
-														End date time must more than <strong> start date time</strong>
+														<p>End date time must more than <strong> start date time</strong></p>
+														<p>If empty our system will set <strong> date same with start date and time will be "23:59:59" so it referring to end of day that date</strong></p>
+														
 													</span>
 												</div>
 											</div>
@@ -130,14 +132,6 @@
 		<!-- end::Body -->
 		<?php $this->load->view('footer_v') ;?>
 		<script type="text/javascript">
-		 $('.date_kapitan').datetimepicker({
-            todayHighlight: true,
-            autoclose: true,
-            pickerPosition: 'bottom-left',
-            format: 'dd/mm/yyyy HH:ii',
-			// defaultDate:'<?php  echo date('d/m/Y H:i')?>';
-        });
-		
 		$('.date_start_kapitan').datetimepicker({
             todayHighlight: true,
             autoclose: true,

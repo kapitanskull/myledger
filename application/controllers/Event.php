@@ -110,7 +110,7 @@ class Event extends CI_Controller {
 		
 		$this->data['arr_data'] = $this->event_m->search_event($keyword64);
 	
-		$this->load->view("event/ajax_transaction_listing_v", $this->data);
+		$this->load->view("event/ajax_event_listing_v", $this->data);
 	}
 	
 	public function add()
@@ -196,13 +196,13 @@ class Event extends CI_Controller {
 			}
 			else{
 				set_message('Data not available', 'danger');
-				redirect('ledger/listing');
+				redirect('event/listing');
 			}
 		}
 		else
 		{
 			set_message('Data not available','danger');
-			redirect('ledger/listing');
+			redirect('event/listing');
 		}
 	} 
 	
