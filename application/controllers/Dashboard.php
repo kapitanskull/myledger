@@ -28,6 +28,7 @@ class Dashboard extends CI_Controller {
 	public function home()
 	{
 		$this->load->model('ledger_m');
+		$this->load->model('event_m');
 		
 		
 		$this->data['meta_title'] = 'Dashboard';
@@ -38,7 +39,8 @@ class Dashboard extends CI_Controller {
 		$this->data['total_income'] = $total_income;
 		$this->data['total_expenses'] = $total_expenses;
 		$this->data['net_income'] = $total_income - $total_expenses;
-		
+		$this->data['event_query'] = $this->event_m->get_event_for_dashboard();
+		// ad($this->data);exit;
 		$this->load->view('home_page_v', $this->data);
 	}
 }

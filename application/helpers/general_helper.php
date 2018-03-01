@@ -426,8 +426,6 @@ if(!function_exists('insert_mail_in_db')){
 		
 	}
 }
-
-
 		
 #ikhwan part####
 function encrypt_data($data = "")

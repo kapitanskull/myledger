@@ -271,27 +271,12 @@ class Event_m extends CI_Model {
 		return false;
 	}
 	
-	function calculate_income()
-	{
-		$sql_income = "SELECT SUM(`income`) as 'total_income' FROM `transaction_records` WHERE `amount_type` = 'income' AND `user_id` = " . $this->db->escape($this->session->userdata('id'));
-		$query_income = $this->db->query($sql_income);
-		if($query_income->num_rows() > 0)
-		{
-			return $query_income->row()->total_income;
-		}
-		else
-			return 0;
-	}
 	
-	function calculate_expenses()
+	function get_event_for_dashboard()
 	{
-		$sql_expenses = "SELECT SUM(`expenses`) as 'total_expenses' FROM `transaction_records` WHERE `amount_type` = 'expenses' AND `user_id` = " . $this->db->escape($this->session->userdata('id'));
-		$query_expenses = $this->db->query($sql_expenses);
-		if($query_expenses->num_rows() > 0)
-		{
-			return $query_expenses->row()->total_expenses;
-		}	
-		else
-			return 0;
+		$sql_data = "SELECT * FROM `event` WHERE `user_id` = " . $this->db->escape(trim($this->session->userdata('id')));
+		$q = $this->db->query($sql_data);
+		
+		return $q->num_rows() > 0 ? $q : false;
 	}
 }

@@ -216,143 +216,26 @@
 				navLinks: true,
 				defaultDate: moment('<?php echo date('Y-m-d') ?>'),
 				googleCalendarApiKey: 'AIzaSyBbh8fohxsGJ8I2fkSZr-w5_RlPZ5k0IqI',
-				events: [
-					{
-						title: 'Meeting',
-						start: moment('2018-02-01'),
-						allDay:true,
-						description: 'Lorem ipsum dolor sit incid idunt ut',
-						className: "m-fc-event--light m-fc-event--solid-warning",
-						editable: true,
-					},
-					{
-						title: 'Conference',                    
-						description: 'try2 sajae',
-						start: moment(YM + '-26T13:30:00'),
-						end: moment(YM + '-26T23:59:59'),
-						className: "m-fc-event--accent",
-						editable: true,
-					},
-					{
-						title: 'Dinner',
-						start: moment('2017-08-30'),
-						description: 'Lorem ipsum dolor sit tempor incid',
-						className: "m-fc-event--light  m-fc-event--solid-danger",
-						editable: true,
-					},
-					{
-						title: 'All Day Event',
-						start: moment(YM + '-01'),
-						description: 'all datdfd boleh klik',
-						className: "m-fc-event--danger m-fc-event--solid-focus m-fc-event-kapitan",
-						editable: true,
-					},
-					{
-						title: 'Reporting',                    
-						description: 'Lorem ipsum dolor incid idunt ut labore',
-						start: moment('2017-09-03T13:30:00'),
-						end: moment('2017-09-04T17:30:00'),
-						className: "m-fc-event--accent m-fc-event-kapitan",
-						editable: true,
-					},
-					{
-						title: 'Company Trip',
-						start: moment(YM + '-05'),
-						end: moment(YM + '-07'),
-						description: 'Lorem ipsum dolor sit tempor incid',
-						className: "m-fc-event--primary",
-						editable: true,
-					},
-					{
-						title: 'ICT Expo 2017 - Product Release',
-						start: moment('2017-09-09'),
-						description: 'Lorem ipsum dolor sit tempor inci',
-						className: "m-fc-event--light m-fc-event--solid-primary",
-						editable: true,
-					},
-					{
-						title: 'Dinner',
-						start: moment('2017-09-12'),
-						description: 'Lorem ipsum dolor sit amet, conse ctetur',
-						editable: true,
-					},
-					{
-						id: 999,
-						title: 'Repeating Event',
-						start: moment( YM + '09-15T16:00:00'),
-						description: 'Lorem ipsum dolor sit ncididunt ut labore',
-						className: "m-fc-event--danger m-fc-event-kapitan",
-						editable: true,
-					},
-					{
-						id: 1000,
-						title: 'Repeating Event',
-						description: 'zs ipsum dolor sit amet, labore',
-						start: YM +'-24T12:00:00',
-						end: YM +'-26T15:00:00',
-						editable: true,
-					},
-					{
-						title: 'Conference',
-						start: moment('2017-09-20T13:00:00'),
-						end: moment('2017-09-21T19:00:00'),
-						description: 'Lorem ipsum dolor eius mod tempor labore',
-						className: "m-fc-event--accent",
-						editable: true,
-					},
-					{
-						title: 'Meeting',
-						start: moment('2017-09-11'),
-						description: 'Lorem ipsum dolor eiu idunt ut labore',
-						editable: true,
-					},
-					{
-						title: 'Lunch',
-						start: moment('2017-09-18'),
-						className: "m-fc-event--info m-fc-event--solid-accent m-fc-event-kapitan",
-						description: 'Lorem ipsum dolor sit amet, ut labore',
-						editable: true,
-					},
-					{
-						title: 'Meeting',
-						start: moment('2017-09-24'),
-						className: "m-fc-event--warning m-fc-event-kapitan",
-						description: 'Lorem ipsum conse ctetur adipi scing',
-						editable: true,
-					},
-					{
-						title: 'Happy Hour',
-						start: moment('2017-09-24'),
-						className: "m-fc-event--light m-fc-event--solid-focus m-fc-event-kapitan",
-						description: 'Lorem ipsum dolor sit amet, conse ctetur',
-						editable: true,
-					},
-					{
-						title: 'Dinner',
-						start: moment('2017-09-24'),
-						className: "m-fc-event--solid-focus m-fc-event--light m-fc-event-kapitan",
-						description: 'Lorem ipsum dolor sit ctetur adipi scing',
-						editable: true,
-					},
-					{
-						title: 'Birthday Party',
-						start: moment('2017-09-24'),
-						className: "m-fc-event--primary m-fc-event-kapitan",
-						description: 'Lorem ipsum dolor sit amet, scing'
-					},
-					{
-						title: 'Company Event',
-						start: moment('2017-09-24'),
-						className: "m-fc-event--danger m-fc-event-kapitan",
-						description: 'Lorem ipsum dolor sit amet, scing'
-					},
-					{
-						title: 'Click for Google',
-						url: 'http://google.com/',
-						start: moment('2017-09-26'),
-						className: "m-fc-event--solid-info m-fc-event--light",
-						description: 'Lorem ipsum dolor sit amet, labore'
-					}
+				events:[
+						<?php 
+						if(isset($event_query) AND $event_query !== false AND $event_query->num_rows() > 0)
+						{
+							foreach($event_query->result() as $revent)
+							{
+						?>
+								{
+									title: '<?php echo ucwords(strtolower($revent->event_title)) ?>',
+									start: moment('<?php echo date('Y-m-d', strtotime($revent->event_start_datetime)) ?>'),
+									allDay:<?php echo ($revent->all_day == 1) ? "true" : "false"; ?>,
+									description: '<?php echo ucwords(strtolower($revent->event_description)) ?>',
+									className: "m-fc-event--light m-fc-event--solid-warning",
+									editable: true,
+								},
+						<?php
+							}						
+						}
+						?>
+					
 				],
 
 				eventRender: function(event, element) {
