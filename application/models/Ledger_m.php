@@ -38,7 +38,7 @@ class Ledger_m extends CI_Model {
 		
 		$data['num_per_page'] = $config['per_page'];
 		
-		$query_data = "SELECT * FROM `transaction_records` " . $where_sql . " ORDER BY `date` ASC " . $limit_sql;
+		$query_data = "SELECT * FROM `transaction_records` " . $where_sql . " ORDER BY `date` DESC " . $limit_sql;
 		
 		$data['query'] = $this->db->query($query_data);
 		
